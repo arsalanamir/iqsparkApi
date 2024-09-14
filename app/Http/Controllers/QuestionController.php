@@ -11,7 +11,28 @@ class QuestionController extends Controller
     // Get all questions
     public function index()
     {
-        return response()->json(Question::all());
+        $questions = Question::all()->map(function ($question) {
+            return [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'question_image' => $question->question_image,
+                'options' => [
+                    'option_a' => $question->option_a,
+                    'option_b' => $question->option_b,
+                    'option_c' => $question->option_c,
+                    'option_d' => $question->option_d,
+                    'option_e' => $question->option_e,
+                    'option_f' => $question->option_f,
+                ],
+                'ans' => $question->ans,
+                'created_at' => $question->created_at,
+                'updated_at' => $question->updated_at,
+            ];
+        });
+
+        return response()->json([
+            'questions' => $questions
+        ]);
     }
 
     // Store a new question
@@ -89,10 +110,27 @@ class QuestionController extends Controller
         $question = Question::find($id);
 
         if (!$question) {
-            return response()->json(['error' => 'Question not found'], 404);
+            return response()->json(['message' => 'Question not found'], 404);
         }
 
-        return response()->json($question);
+        return response()->json([
+            'question' => [
+                'id' => $question->id,
+                'question_text' => $question->question_text,
+                'question_image' => $question->question_image,
+                'options' => [
+                    'option_a' => $question->option_a,
+                    'option_b' => $question->option_b,
+                    'option_c' => $question->option_c,
+                    'option_d' => $question->option_d,
+                    'option_e' => $question->option_e,
+                    'option_f' => $question->option_f,
+                ],
+                'ans' => $question->ans,
+                'created_at' => $question->created_at,
+                'updated_at' => $question->updated_at,
+            ]
+        ]);
     }
 
     // Update a question
