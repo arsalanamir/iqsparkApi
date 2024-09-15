@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -39,7 +40,7 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         // Validate the incoming request
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'question_text' => 'required|string', // Text of the question is required
             'question_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image of the question is required
             'option_a' => 'nullable|string',
@@ -56,6 +57,13 @@ class QuestionController extends Controller
             'option_f_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'ans' => 'required|string|in:option_a,option_b,option_c,option_d,option_e,option_f', // Correct answer is required
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+                'status' => 401,
+            ]);
+        }
+
         // dd($request->all());
 
         // Save images if provided
@@ -138,7 +146,8 @@ class QuestionController extends Controller
     {
         // Validate the incoming request
 
-        $request->validate([
+        // Validate the incoming request
+        $validator = Validator::make($request->all(), [
             'id' => 'required',
             'question_text' => 'required|string', // Text of the question is required
             'question_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image of the question is required
@@ -156,6 +165,12 @@ class QuestionController extends Controller
             'option_f_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'ans' => 'required|string|in:option_a,option_b,option_c,option_d,option_e,option_f', // Correct answer is required
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+                'status' => 401,
+            ]);
+        }
         $id = $request->id;
         $question = Question::find($id);
 
