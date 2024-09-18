@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\UserAttempts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -195,8 +196,7 @@ class QuestionController extends Controller
             $question->option_a = $request->hasFile('option_a_image')
                 ? $request->file('option_a_image')->store('questions', 'public')
                 : $request->option_a;
-        }
-        else{
+        } else {
             $question->option_a = $request->option_a;
         }
 
@@ -208,8 +208,7 @@ class QuestionController extends Controller
             $question->option_b = $request->hasFile('option_b_image')
                 ? $request->file('option_b_image')->store('questions', 'public')
                 : $request->option_b;
-        }
-         else{
+        } else {
             $question->option_b = $request->option_b;
         }
         if ($request->hasFile('option_c_image')) {
@@ -220,8 +219,7 @@ class QuestionController extends Controller
             $question->option_c = $request->hasFile('option_c_image')
                 ? $request->file('option_c_image')->store('questions', 'public')
                 : $request->option_c;
-        }
-         else{
+        } else {
             $question->option_c = $request->option_c;
         }
         if ($request->hasFile('option_d_image')) {
@@ -232,8 +230,7 @@ class QuestionController extends Controller
             $question->option_d = $request->hasFile('option_d_image')
                 ? $request->file('option_d_image')->store('questions', 'public')
                 : $request->option_d;
-        }
-         else{
+        } else {
             $question->option_d = $request->option_d;
         }
         if ($request->hasFile('option_e_image')) {
@@ -244,8 +241,7 @@ class QuestionController extends Controller
             $question->option_e = $request->hasFile('option_e_image')
                 ? $request->file('option_e_image')->store('questions', 'public')
                 : $request->option_e;
-        }
-         else{
+        } else {
             $question->option_e = $request->option_e;
         }
         if ($request->hasFile('option_f_image')) {
@@ -295,61 +291,5 @@ class QuestionController extends Controller
         return response()->json(['message' => 'Question deleted successfully']);
     }
 
-    public function attempt(Request $request, $id)
-    {
-        $question = Question::find($id);
 
-        if (!$question) {
-            return response()->json(['error' => 'Question not found'], 404);
-        }
-
-        $request->validate([
-            'selected_answer' => 'required|string|in:option_a,option_b,option_c,option_d,option_e,option_f',
-        ]);
-
-        // Check if the selected answer is correct
-        $isCorrect = $question->ans === $request->selected_answer;
-
-        return response()->json([
-            'question_id' => $id,
-            'is_correct'  => $isCorrect,
-            'correct_answer' => $question->ans
-        ]);
-    }
-
-    public function calculatePercentage(Request $request)
-    {
-        $request->validate([
-            'attempts' => 'required|array',
-            'attempts.*.question_id' => 'required|integer|exists:questions,id',
-            'attempts.*.selected_answer' => 'required|string|in:option_a,option_b,option_c,option_d,option_e,option_f',
-        ]);
-
-        $correctAnswers = [];
-        $correctCount = 0;
-        $total = Question::get()->count();
-
-        foreach ($request->attempts as $attempt) {
-            $question = Question::find($attempt['question_id']);
-
-            if ($question && $question->ans === $attempt['selected_answer']) {
-                $correctAnswers[] = [
-                    'question_id' => $attempt['question_id'],
-                    'correct_answer' => $question->ans,
-                ];
-                $correctCount++;
-            }
-        }
-
-        // Calculate the percentage based on a total of 40 questions
-        $percentage = ($correctCount / $total) * 100;
-
-        return response()->json([
-            'total_questions' => $total,
-            'attempted_questions' => count($request->attempts),
-            'correct_attempts' => $correctCount,
-            'correct_answers' => $correctAnswers, // Returning correct answers array
-            'percentage' => $percentage,
-        ]);
-    }
 }
