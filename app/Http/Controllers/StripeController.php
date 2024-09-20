@@ -36,10 +36,10 @@ class StripeController extends Controller
                 if ($user_attempt) {
                     $user_attempt->is_paid = true;
                     $user_attempt->save();
+                    $user = (object)['name' => $user_attempt->name, 'email' => $user_attempt->email];
+                    Mail::to($user->email)->send(new PaymentSuccessMail($user, $user_attempt->percentage));
                 }
 
-                $user = (object)['name' => $user_attempt->name, 'email' => $user_attempt->email];
-                Mail::to($user->email)->send(new PaymentSuccessMail($user, $user_attempt->percentage));
 
                 return response()->json(['message' => 'Payment successful', 'charge' => $charge], 200);
             }
