@@ -91,7 +91,7 @@ class ResultController extends Controller
             'total_questions' => 'required|integer',
             'attempted_questions' => 'required|integer',
             'correct_attempts' => 'required|integer',
-            'percentage' => 'required|numeric|min:0|max:100', // Validate percentage range
+            'percentage' => 'required|numeric|min:0|max:150', // Validate percentage range
         ]);
         if ($validator->fails()) {
             return response()->json([

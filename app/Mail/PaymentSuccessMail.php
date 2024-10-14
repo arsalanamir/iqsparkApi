@@ -11,12 +11,14 @@ class PaymentSuccessMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $iqPrecentage;
+    public $percentage;
+    public $pdfUrl;
 
-    public function __construct($user, $iqPrecentage)
+    public function __construct($user, $percentage, $pdfUrl)
     {
         $this->user = $user;
-        $this->iqPrecentage = $iqPrecentage;
+        $this->percentage = $percentage;
+        $this->pdfUrl = $pdfUrl;
     }
 
     public function build()
@@ -25,8 +27,9 @@ class PaymentSuccessMail extends Mailable
             ->subject('Payment Successful')
             ->with([
                 'name' => $this->user->name,
-                'email' => $this->user->email, // converting cents to dollars
-                'iqPrecentage' => $this->iqPrecentage,
+                'email' => $this->user->email,
+                'percentage' => $this->percentage,
+                'pdfUrl' => $this->pdfUrl,
             ]);
     }
 }

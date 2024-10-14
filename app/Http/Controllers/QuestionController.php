@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\ContectUs;
 use App\Models\UserAttempts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -290,6 +292,40 @@ class QuestionController extends Controller
 
         return response()->json(['message' => 'Question deleted successfully']);
     }
+    public function contectUs(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|max:255',
+            'comments' => 'nullable|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+                'status' => 401,
+            ]);
+        }
+        // dd($request->all());
+        // Create a new contact record
+        $contact = ContectUs::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'comments' => $request->comments,
+        ]);
+        // Admin email address
+        $adminEmail = 'iq.iqspark.org@gmail.com';  // Replace with your admin email
 
+        // Send an email to the admin with contact details
+        Mail::send('emails.contact', ['contact' => $contact], function ($message) use ($adminEmail) {
+            $message->to($adminEmail);
+            $message->subject('You have a new Query');
+        });
 
+        return response()->json([
+            'message' => 'Message sended successfully!',
+            'contact' => $contact,
+        ]);
+    }
 }

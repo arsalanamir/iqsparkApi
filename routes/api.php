@@ -11,6 +11,7 @@ Route::post('questions', [QuestionController::class, 'store']);
 Route::get('questions/{id}', [QuestionController::class, 'show']);
 Route::post('questions/update', [QuestionController::class, 'update']);
 Route::delete('questions/{id}', [QuestionController::class, 'destroy']);
+Route::post('/contact', [QuestionController::class, 'contectUs']);
 
 Route::post('questions/{id}/attempt', [ResultController::class, 'attempt']);
 Route::post('questions/calculate-percentage', [ResultController::class, 'calculatePercentage']);
