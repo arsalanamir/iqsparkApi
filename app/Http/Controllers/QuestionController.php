@@ -87,9 +87,11 @@ class QuestionController extends Controller
         $optionDImage = $request->hasFile('option_d_image')
             ? $request->file('option_d_image')->store('questions', 'public')
             : null;
+
         $optionEImage = $request->hasFile('option_e_image')
             ? $request->file('option_e_image')->store('questions', 'public')
             : null;
+
         $optionFImage = $request->hasFile('option_f_image')
             ? $request->file('option_f_image')->store('questions', 'public')
             : null;
