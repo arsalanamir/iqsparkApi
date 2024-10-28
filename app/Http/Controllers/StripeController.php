@@ -34,16 +34,23 @@ class StripeController extends Controller
                 if ($user_attempt) {
                     $user_attempt->is_paid = true;
                     $user_attempt->save();
+                    $imagePath = public_path('images/background.jpeg');
+                    // dd($imagePath);
+                    // $imageData = base64_encode(file_get_contents($imagePath));
+                    // $src = 'data:image/jpeg;base64,' . $imageData;
+                    $src = $imagePath;
 
                     // Generate the PDF and store it
                     $data = [
                         'name' => $user_attempt->name,
                         'percentage' => $user_attempt->percentage,
                         'date' => date('m/d/Y'),
+                        'src' => $src,
                     ];
 
 
-                    $pdf = PDF::loadView('pdf.report', $data);
+                    $pdf = PDF::loadView('pdf.report', $data)
+                        ->setPaper([0, 0, 750, 500]);
 
                     // Save the PDF using Laravel's Storage facade
                     $pdfContent = $pdf->output(); // Get the PDF content as string
@@ -54,7 +61,12 @@ class StripeController extends Controller
                     $pdfUrl = Storage::url($pdfFileName);
 
                     // Send the email with the PDF link
-                    $user = (object)['name' => $user_attempt->name, 'email' => $user_attempt->email];
+                    $user = (object)[
+                        'name' => $user_attempt->name,
+                        'email' => $user_attempt->email,
+                        'total_questions' => $user_attempt->total_questions,
+                        'correct_attempts' => $user_attempt->correct_attempts,
+                    ];
                     Mail::to($user->email)->send(new PaymentSuccessMail($user, $user_attempt->percentage, $pdfUrl));
                 }
 

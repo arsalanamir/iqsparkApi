@@ -22,10 +22,16 @@
         }
 
         .certificate-container {
-            width: 1000px;
-            height: 700px;
-            background: url('/images/background.jpeg') no-repeat center center; /* Use absolute URL */
+            width: 100%;
+            /* Full width */
+            height: auto;
+            /* Allow height to adjust based on content */
+            min-height: 666px;
+            /* Ensure it fills at least the specified height */
+            background-image: url('{{ $src }}');
+            background-repeat: no-repeat;
             background-size: cover;
+            /* Ensure it covers the entire area */
             position: relative;
         }
 
@@ -62,7 +68,7 @@
         .serial {
             margin-top: -17px;
             font-weight: bold;
-            margin-left: 775px;
+            margin-left: 800px;
             position: relative;
             top: 24px;
         }
