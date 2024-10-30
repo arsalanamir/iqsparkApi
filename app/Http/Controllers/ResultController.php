@@ -87,7 +87,7 @@ class ResultController extends Controller
         // Validate incoming request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:user_attempts,email', // Ensure email is unique
+            'email' => 'required', // Ensure email is unique
             'total_questions' => 'required|integer',
             'attempted_questions' => 'required|integer',
             'correct_attempts' => 'required|integer',
@@ -101,16 +101,16 @@ class ResultController extends Controller
         }
         $total = Question::get()->count();
         // Prepare data to save
-        $data = [
+        $data = UserAttempts::create([
             'name' => $request->name,
             'email' => $request->email,
             'total_questions' => $total,
             'attempted_questions' => $request->attempted_questions,
             'correct_attempts' => $request->correct_attempts,
             'percentage' => $request->percentage,
-        ];
+        ]);
         // Create a new user record
-        UserAttempts::create($data);
+        ($data);
 
         return response()->json([
             'message' =>

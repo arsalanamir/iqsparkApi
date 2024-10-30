@@ -30,7 +30,7 @@ class StripeController extends Controller
 
             if ($charge->status === 'succeeded') {
                 // Update the 'is_paid' status in the database
-                $user_attempt = UserAttempts::where('email', $request->email)->first();
+                $user_attempt = UserAttempts::where('id', $request->id)->first();
                 if ($user_attempt) {
                     $user_attempt->is_paid = true;
                     $user_attempt->save();
@@ -51,10 +51,10 @@ class StripeController extends Controller
 
                     $pdf = PDF::loadView('pdf.report', $data)
                         ->setPaper([0, 0, 750, 500]);
-
+                    $randomNumber = random_int(100000, 999999);
                     // Save the PDF using Laravel's Storage facade
                     $pdfContent = $pdf->output(); // Get the PDF content as string
-                    $pdfFileName = 'reports/' . $user_attempt->email . '_report.pdf';
+                    $pdfFileName = 'reports/' . $randomNumber . '_report.pdf';
                     Storage::disk('public')->put($pdfFileName, $pdfContent);
 
                     // Generate the PDF URL
