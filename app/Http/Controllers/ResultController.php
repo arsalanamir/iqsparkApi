@@ -68,8 +68,8 @@ class ResultController extends Controller
 
 
         // Calculate the percentage based on a total of 40 questions
-        $baseline_iq = 80;
-        $desired_maximum_iq = 150;
+        $baseline_iq = 70;
+        $desired_maximum_iq = 164;
         $percentage_correct = ($correctCount / $total);
         $percentage = $baseline_iq + $percentage_correct * ($desired_maximum_iq - $baseline_iq);
 
@@ -91,7 +91,7 @@ class ResultController extends Controller
             'total_questions' => 'required|integer',
             'attempted_questions' => 'required|integer',
             'correct_attempts' => 'required|integer',
-            'percentage' => 'required|numeric|min:0|max:150', // Validate percentage range
+            'percentage' => 'required|numeric|min:0|max:164', // Validate percentage range
         ]);
         if ($validator->fails()) {
             return response()->json([
