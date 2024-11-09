@@ -317,7 +317,7 @@ class QuestionController extends Controller
             'comments' => $request->comments,
         ]);
         // Admin email address
-        $adminEmail = 'iq.iqspark.org@gmail.com';  // Replace with your admin email
+        $adminEmail = 'iqspark.org@gmail.com';  // Replace with your admin email
 
         // Send an email to the admin with contact details
         Mail::send('emails.contact', ['contact' => $contact], function ($message) use ($adminEmail) {

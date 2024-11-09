@@ -1,0 +1,1 @@
+[01-Nov-2024 09:58:24 UTC] PHP Fatal error:  Trait "Laravel\Passport\HasApiTokens" not found in /home/sharhitu/api.iqspark.org/app/Models/User.php on line 20

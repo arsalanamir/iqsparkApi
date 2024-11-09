@@ -22,7 +22,7 @@ class PaymentReminder extends Mailable
         return $this->view('emails.payment_reminder')
             ->with([
                 'name' => $this->user->name,
-                'email' => $this->user->email,
+                'date' => $this->user->created_at,
             ]);
     }
 }

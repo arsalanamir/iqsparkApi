@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Stripe\Token;
 use Stripe\Charge;
+use Stripe\Customer;
 use Stripe\Stripe;
 use PDF; // Add PDF facade
 use App\Models\UserAttempts;
@@ -18,19 +19,26 @@ class StripeController extends Controller
     {
         // Set Stripe API Key
         Stripe::setApiKey(config('services.stripe.secret'));
+        $user_attempt = UserAttempts::where('id', $request->id)->first();
 
         try {
+
+            $customer = Customer::create([
+                'name' => $user_attempt->name,
+                'email' => $user_attempt->email,
+                'source' => $request->token, //token from Stripe
+            ]);
+
             // Create a charge with the received token
             $charge = Charge::create([
                 'amount' => $request->amount * 100, // Convert amount to cents
                 'currency' => 'usd',
-                'description' => 'charge on website',
-                'source' => $request->token, // Token from Stripe
+                'description' => 'charge on IQ test',
+                'customer' => $customer->id, // Customer ID
             ]);
 
             if ($charge->status === 'succeeded') {
                 // Update the 'is_paid' status in the database
-                $user_attempt = UserAttempts::where('id', $request->id)->first();
                 if ($user_attempt) {
                     $user_attempt->is_paid = true;
                     $user_attempt->save();
