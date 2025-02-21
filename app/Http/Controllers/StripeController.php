@@ -33,7 +33,7 @@ class StripeController extends Controller
             $charge = Charge::create([
                 'amount' => $request->amount * 100, // Convert amount to cents
                 'currency' => 'usd',
-                'description' => 'charge on IQ test',
+                'description' => 'charge for IQ Test',
                 'customer' => $customer->id, // Customer ID
             ]);
 
