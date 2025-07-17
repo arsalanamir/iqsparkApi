@@ -133,7 +133,7 @@
                         <p>Best regards,<br><a href="https://iqspark.org/test">iqspark.org</a></p>
 
                         <div class="footer">
-                            <p>&copy; 2024 iqspark.org. All Rights Reserved.</p>
+                            <p>&copy; {{ date('Y') }} iqspark.org. All Rights Reserved.</p>
                         </div>
                     </div>
                 </div>

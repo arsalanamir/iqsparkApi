@@ -104,12 +104,12 @@
 
                         <p>Moreover, you can download your IQ Certificate from the following link: <a href="{{ $pdfUrl }}" class="btn btn-primary btn-lg" style="background-color: #ff9900 !important; color: #ffffff !important;">Download Certificate</a></p>
 
-                        <p>If you have any questions or need further assistance, please don't hesitate to contact us at support@iqspark.org. We're here to help.</p>
+                        <p>If you have any questions or need further assistance, please don't hesitate to contact us at iqspark.org@gmail.com. We're here to help.</p>
 
-                        <p>Best regards,<br>Team iqspark.org</p>
+                        <p>Best regards,<br>Team IQSPARK.org</p>
 
                         <div class="footer">
-                            <p>&copy; {{ date('Y') }} iqspark.org All Rights Reserved.</p>
+                            <p>&copy; {{ date('Y') }} IQSPARK.org All Rights Reserved.</p>
                         </div>
                     </div>
                 </div>
